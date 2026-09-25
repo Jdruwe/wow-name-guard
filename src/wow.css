@@ -1,0 +1,216 @@
+:root {
+  --gold: #c8a144;
+  --gold-bright: #e8c86a;
+  --gold-dark: #7a5c1e;
+  --panel-dark: #120b06;
+  --panel-mid: #1e130a;
+  --ink: #f4ecd8;
+  --red: #ff3a2f;
+  --green: #6dd45f;
+  --orange: #ffb347;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, #2a4158 0%, #16222e 60%, #0a1118 100%);
+  font-family: 'Cinzel', serif;
+  color: var(--ink);
+}
+
+.backdrop {
+  max-width: 640px;
+  margin: 12vh auto 0;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.name-panel {
+  width: 100%;
+  background: linear-gradient(180deg, var(--panel-mid) 0%, var(--panel-dark) 100%);
+  border: 1px solid var(--gold-dark);
+  box-shadow:
+    0 0 0 2px var(--gold-dark),
+    0 0 0 3px #3a2c12,
+    0 4px 18px rgba(0, 0, 0, 0.6),
+    inset 0 0 12px rgba(0, 0, 0, 0.8);
+  border-radius: 3px;
+}
+
+.name-panel__title {
+  text-align: center;
+  padding: 10px 0 8px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fdf6e3;
+  text-shadow: 0 1px 2px #000;
+  border-bottom: 1px solid var(--gold-dark);
+  box-shadow: 0 1px 0 rgba(232, 200, 106, 0.25);
+  background: linear-gradient(180deg, #241609 0%, #170d06 100%);
+}
+
+.name-panel__row {
+  display: flex;
+  gap: 10px;
+  padding: 14px 12px;
+  align-items: center;
+}
+
+.dice {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 45%, var(--gold-dark) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.7);
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.dice:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.dice:active:not(:disabled) {
+  filter: brightness(0.9);
+}
+
+.dice:disabled {
+  cursor: wait;
+  filter: saturate(0.5);
+}
+
+.name-input {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background: #060302;
+  border: 1px solid #5c4620;
+  border-radius: 2px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+.name-input::placeholder {
+  color: #6b5c40;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: var(--gold-bright);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 6px rgba(232, 200, 106, 0.4);
+}
+
+.check-button {
+  display: block;
+  margin: 0 12px 14px;
+  padding: 8px 0;
+  width: calc(100% - 24px);
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1b1004;
+  cursor: pointer;
+  border: 1px solid var(--gold-dark);
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.check-button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.check-button:disabled {
+  cursor: default;
+  filter: saturate(0.4) brightness(0.8);
+}
+
+.verdict {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 3px #000;
+  text-align: center;
+}
+
+.verdict--flagged,
+.verdict--error {
+  color: var(--red);
+}
+
+.verdict--suspicious {
+  color: var(--orange);
+}
+
+.verdict--clean {
+  color: var(--green);
+}
+
+.detail-panel {
+  width: 100%;
+  background: rgba(10, 6, 3, 0.85);
+  border: 1px solid var(--gold-dark);
+  border-radius: 2px;
+  padding: 0;
+  font-size: 14px;
+}
+
+.detail-panel summary {
+  cursor: pointer;
+  padding: 8px 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+}
+
+.detail-panel dl {
+  margin: 0;
+  padding: 4px 14px 12px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+}
+
+.detail-panel dt {
+  color: #b09a68;
+}
+
+.detail-panel dd {
+  margin: 0;
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+}
+
+.verdict-text--flagged {
+  color: var(--red);
+}
+
+.verdict-text--suspicious {
+  color: var(--orange);
+}
+
+.verdict-text--clean {
+  color: var(--green);
+}

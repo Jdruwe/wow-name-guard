@@ -3,3 +3,12 @@
 
 # macOS
 .DS_Store
+
+# Secrets
+.env
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
