@@ -1,13 +1,38 @@
+/*
+ * WoW character-create "Full Name" panel.
+ *
+ * Frames are drawn with inline-SVG border-images so the chamfered corners,
+ * bevelled metal band and corner rivet plates scale with the element while
+ * keeping pixel-exact corners. Colors sampled from wow-ui-fullname.webp.
+ */
+
 :root {
-  --gold: #c8a144;
-  --gold-bright: #e8c86a;
-  --gold-dark: #7a5c1e;
-  --panel-dark: #120b06;
-  --panel-mid: #1e130a;
-  --ink: #f4ecd8;
-  --red: #ff3a2f;
-  --green: #6dd45f;
-  --orange: #ffb347;
+  /* WoW font colors (NORMAL_FONT_COLOR, RED/GREEN/ORANGE quality colors) */
+  --wow-gold: #ffd100;
+  --wow-red: #ff2020;
+  --wow-green: #1eff00;
+  --wow-orange: #ff8000;
+  --wow-white: #f3eee2;
+
+  --font-header: 'Marcellus', 'Friz Quadrata TT', 'Friz Quadrata', Georgia, serif;
+  --font-body: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+
+  /* Metal frame with two rivet plates on each top corner.
+     80x64 image; slices 26 / 36 / 24 / 36; frame outer edge sits 8px (top)
+     and 6px (sides, bottom) inside the image -> matching border-image-outset.
+     Band, outside -> in: dark outline, bright rim, bronze body, bright inner
+     rim (chamfered), dark lip. */
+  --frame-panel: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='64'><defs><linearGradient id='b' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23766750'/><stop offset='1' stop-color='%234f4434'/></linearGradient><linearGradient id='p' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%235e5140'/><stop offset='1' stop-color='%232c241a'/></linearGradient><g id='pl'><rect x='.5' y='.5' width='16' height='16' rx='3.5' fill='url(%23p)' stroke='%23100b06'/><rect x='1.5' y='1.5' width='14' height='14' rx='2.6' fill='none' stroke='%23978566' stroke-opacity='.7'/><circle cx='8.5' cy='8.5' r='2.6' fill='%23150f09'/><circle cx='8.2' cy='8.2' r='1.5' fill='%23a99a79'/><circle cx='7.8' cy='7.8' r='.6' fill='%23e2d6b6'/></g><g id='pls'><use href='%23pl'/><use href='%23pl' x='17'/></g></defs><path fill-rule='evenodd' fill='%23110b06' d='M6 8H74V58H6ZM22 16H58L66 24V42L58 50H22L14 42V24Z'/><path fill-rule='evenodd' fill='url(%23b)' d='M7 9H73V57H7ZM21.17 14H58.83L68 23.17V42.83L58.83 52H21.17L12 42.83V23.17Z'/><rect x='7.5' y='9.5' width='65' height='47' fill='none' stroke='%239f8f6e'/><path fill='none' stroke='%238a7a5b' d='M20.96 13.5H59.04L68.5 22.96V43.04L59.04 52.5H20.96L11.5 43.04V22.96Z'/><path d='M8 10 16.6 18.6M72 10 63.4 18.6' stroke='%23b8a988'/><path d='M8 56 16.6 47.4M72 56 63.4 47.4' stroke='%23342a1e'/><use href='%23pls'/><use href='%23pls' transform='matrix(-1 0 0 1 80 0)'/></svg>");
+
+  /* Chamfered edit box: black well, tan rim, dark inner rim. 24x24, slice 7. */
+  --frame-input: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M5.5.5h13l5 5v13l-5 5h-13l-5-5v-13z' fill='%23050302' stroke='%23887352'/><path d='M6.1 1.5h11.8l4.6 4.6v11.8l-4.6 4.6H6.1l-4.6-4.6V6.1z' fill='none' stroke='%23362a1a'/></svg>");
+  --frame-input-focus: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M5.5.5h13l5 5v13l-5 5h-13l-5-5v-13z' fill='%23050302' stroke='%23e0bd6a'/><path d='M6.1 1.5h11.8l4.6 4.6v11.8l-4.6 4.6H6.1l-4.6-4.6V6.1z' fill='none' stroke='%236b5429'/></svg>");
+
+  /* Chamfered icon button: dark slate well, greyer rim. */
+  --frame-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23221b14'/><stop offset='1' stop-color='%23110d09'/></linearGradient></defs><path d='M6.5.5h11l6 6v11l-6 6h-11l-6-6v-11z' fill='url(%23g)' stroke='%236f624b'/><path d='M7 1.5h10l5.5 5.5v10L17 22.5H7L1.5 17V7z' fill='none' stroke='%23000' stroke-opacity='.6'/></svg>");
+
+  /* Horizontal leather/wood grain laid over the panel fill. */
+  --grain: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.004 .35' numOctaves='3' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -.7 .5'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
 * {
@@ -17,200 +42,275 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 30%, #2a4158 0%, #16222e 60%, #0a1118 100%);
-  font-family: 'Cinzel', serif;
-  color: var(--ink);
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, #2a4158 0%, #16222e 60%, #0a1118 100%);
+  font-family: var(--font-header);
+  color: var(--wow-white);
+  -webkit-font-smoothing: antialiased;
 }
 
 .backdrop {
-  max-width: 640px;
+  max-width: 960px;
   margin: 12vh auto 0;
-  padding: 0 16px;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
-.name-panel {
+/* ---------- Framed panel (shared by name panel + detail panel) ---------- */
+
+.name-panel,
+.detail-panel {
   width: 100%;
-  background: linear-gradient(180deg, var(--panel-mid) 0%, var(--panel-dark) 100%);
-  border: 1px solid var(--gold-dark);
-  box-shadow:
-    0 0 0 2px var(--gold-dark),
-    0 0 0 3px #3a2c12,
-    0 4px 18px rgba(0, 0, 0, 0.6),
-    inset 0 0 12px rgba(0, 0, 0, 0.8);
-  border-radius: 3px;
+  border: 8px solid transparent;
+  border-image-source: var(--frame-panel);
+  border-image-slice: 26 36 24 36;
+  border-image-width: 26px 36px 24px 36px;
+  border-image-outset: 8px 6px 6px 6px;
+  border-image-repeat: stretch;
+  background: var(--grain), linear-gradient(180deg, #2a1d12 0%, #21170e 55%, #1a110a 100%);
+  background-clip: padding-box;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.65), inset 0 3px 4px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
 }
 
 .name-panel__title {
+  padding: 3px 0 1px;
   text-align: center;
-  padding: 10px 0 8px;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #fdf6e3;
-  text-shadow: 0 1px 2px #000;
-  border-bottom: 1px solid var(--gold-dark);
-  box-shadow: 0 1px 0 rgba(232, 200, 106, 0.25);
-  background: linear-gradient(180deg, #241609 0%, #170d06 100%);
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0.01em;
+  color: var(--wow-white);
+  text-shadow: 0 1px 1px #000, 0 0 3px rgba(0, 0, 0, 0.8);
 }
 
 .name-panel__row {
   display: flex;
-  gap: 10px;
-  padding: 14px 12px;
   align-items: center;
+  gap: 14px;
+  padding: 0 4px 4px;
 }
+
+/* Mirror the dice so the edit boxes (and title) sit centred, as in-game. */
+.name-panel__row::after {
+  content: '';
+  flex: none;
+  width: 40px;
+}
+
+@media (max-width: 560px) {
+  .name-panel__row::after {
+    display: none;
+  }
+}
+
+/* ---------- Dice ---------- */
 
 .dice {
   flex: none;
-  width: 34px;
-  height: 34px;
-  font-size: 17px;
-  line-height: 1;
-  cursor: pointer;
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 45%, var(--gold-dark) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.7);
+  width: 40px;
+  height: 40px;
+  padding: 0;
   display: grid;
   place-items: center;
-  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: 6px solid transparent;
+  border-image: var(--frame-icon) 8 fill / 8px stretch;
 }
 
-.dice:hover:not(:disabled) {
-  filter: brightness(1.15);
+.dice__icon {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+  transition: transform 120ms ease;
 }
 
-.dice:active:not(:disabled) {
-  filter: brightness(0.9);
+.dice:hover:not(:disabled) .dice__icon {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 4px rgba(255, 209, 0, 0.55))
+    brightness(1.1);
+}
+
+.dice:active:not(:disabled) .dice__icon {
+  transform: translateY(1px) scale(0.94);
 }
 
 .dice:disabled {
   cursor: wait;
-  filter: saturate(0.5);
 }
+
+.dice:disabled .dice__icon {
+  filter: grayscale(1) brightness(0.6);
+}
+
+.dice:focus-visible {
+  outline: none;
+  border-image-source: var(--frame-input-focus);
+}
+
+/* ---------- Edit boxes ---------- */
 
 .name-input {
   flex: 1;
   min-width: 0;
-  height: 34px;
+  height: 44px;
+  padding: 0 6px;
   text-align: center;
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  letter-spacing: 0.04em;
-  color: #ffffff;
-  background: #060302;
-  border: 1px solid #5c4620;
-  border-radius: 2px;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 0 1px 1px #000;
+  caret-color: var(--wow-gold);
+  background: none;
+  border: 7px solid transparent;
+  border-image: var(--frame-input) 7 fill / 7px stretch;
 }
 
 .name-input::placeholder {
-  color: #6b5c40;
+  color: #6c6254;
+  text-shadow: none;
 }
 
 .name-input:focus {
   outline: none;
-  border-color: var(--gold-bright);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 6px rgba(232, 200, 106, 0.4);
+  border-image-source: var(--frame-input-focus);
 }
 
+/* ---------- Red UIPanelButton ---------- */
+
 .check-button {
-  display: block;
-  margin: 0 12px 14px;
-  padding: 8px 0;
-  width: calc(100% - 24px);
-  font-family: 'Cinzel', serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #1b1004;
+  min-width: 200px;
+  height: 34px;
+  padding: 0 28px;
+  font-family: var(--font-header);
+  font-size: 16px;
+  color: var(--wow-gold);
+  text-shadow: 0 1px 1px #000, 0 0 2px #000;
   cursor: pointer;
-  border: 1px solid var(--gold-dark);
-  border-radius: 2px;
-  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-dark) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.7);
+  border: 1px solid #1c0201;
+  border-radius: 5px;
+  background:
+    linear-gradient(180deg, rgba(255, 190, 150, 0.28) 0%, rgba(255, 190, 150, 0) 45%),
+    linear-gradient(180deg, #a8190f 0%, #7a0a05 50%, #4d0402 100%);
+  box-shadow:
+    0 0 0 1px #8b7446,
+    0 0 0 2px #2a1f12,
+    inset 0 1px 0 rgba(255, 210, 170, 0.35),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.45),
+    0 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 .check-button:hover:not(:disabled) {
-  filter: brightness(1.12);
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(255, 200, 160, 0.34) 0%, rgba(255, 200, 160, 0) 45%),
+    linear-gradient(180deg, #c42114 0%, #8d0d07 50%, #5a0503 100%);
+}
+
+.check-button:active:not(:disabled) {
+  padding-top: 2px;
+  background: linear-gradient(180deg, #4d0402 0%, #7a0a05 60%, #8d0d07 100%);
+  box-shadow:
+    0 0 0 1px #8b7446,
+    0 0 0 2px #2a1f12,
+    inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.check-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px #e0bd6a,
+    0 0 0 2px #2a1f12,
+    0 0 8px rgba(255, 209, 0, 0.5),
+    inset 0 1px 0 rgba(255, 210, 170, 0.35);
 }
 
 .check-button:disabled {
   cursor: default;
-  filter: saturate(0.4) brightness(0.8);
+  color: #8a8a8a;
+  background: linear-gradient(180deg, #5c5c5c 0%, #3f3f3f 50%, #2a2a2a 100%);
+  box-shadow:
+    0 0 0 1px #5e5a52,
+    0 0 0 2px #1c1c1c,
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 3px 6px rgba(0, 0, 0, 0.7);
 }
+
+/* ---------- Verdict (UIErrorsFrame-style text) ---------- */
 
 .verdict {
   margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-shadow: 0 1px 3px #000;
+  font-size: 20px;
   text-align: center;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .verdict--flagged,
 .verdict--error {
-  color: var(--red);
+  color: var(--wow-red);
 }
 
 .verdict--suspicious {
-  color: var(--orange);
+  color: var(--wow-orange);
 }
 
 .verdict--clean {
-  color: var(--green);
+  color: var(--wow-green);
 }
 
+/* ---------- Detail panel ---------- */
+
 .detail-panel {
-  width: 100%;
-  background: rgba(10, 6, 3, 0.85);
-  border: 1px solid var(--gold-dark);
-  border-radius: 2px;
-  padding: 0;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .detail-panel summary {
   cursor: pointer;
-  padding: 8px 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--gold-bright);
+  padding: 4px 8px 6px;
+  font-size: 17px;
+  color: var(--wow-gold);
+  text-shadow: 0 1px 1px #000;
+}
+
+.detail-panel summary:hover {
+  color: #fff;
 }
 
 .detail-panel dl {
   margin: 0;
-  padding: 4px 14px 12px;
+  padding: 2px 12px 10px;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 6px 16px;
+  gap: 6px 18px;
 }
 
 .detail-panel dt {
-  color: #b09a68;
+  color: var(--wow-gold);
+  text-shadow: 0 1px 1px #000;
 }
 
 .detail-panel dd {
   margin: 0;
-  font-family: 'EB Garamond', serif;
+  font-family: var(--font-body);
   font-size: 15px;
+  color: #fff;
+  text-shadow: 0 1px 1px #000;
 }
 
-.verdict-text--flagged {
-  color: var(--red);
+.detail-panel .verdict-text {
+  text-transform: capitalize;
 }
 
-.verdict-text--suspicious {
-  color: var(--orange);
+.detail-panel .verdict-text--flagged {
+  color: var(--wow-red);
 }
 
-.verdict-text--clean {
-  color: var(--green);
+.detail-panel .verdict-text--suspicious {
+  color: var(--wow-orange);
+}
+
+.detail-panel .verdict-text--clean {
+  color: var(--wow-green);
 }

@@ -14,6 +14,12 @@ type DecisionsResponse = {
     category: { type: 'choice'; choice: string }
     severity: { type: 'score'; score: number }
   }
+  usage: {
+    input_tokens: number
+    output_tokens: number
+    /** What this call cost, in USD. Jev only bills input tokens. */
+    cost: number
+  }
 }
 
 const CATEGORIES: Category[] = ['clean', 'sexual', 'racist', 'offensive', 'inauthentic']
@@ -94,5 +100,6 @@ export async function askJev({ firstName, surname }: JevRequest) {
     inappropriate: { noul: data.answers.inappropriate.noul },
     category: { choice: category },
     severity: { score: data.answers.severity.score },
+    usage: data.usage,
   }
 }

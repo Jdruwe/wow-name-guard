@@ -62,10 +62,11 @@ export default function App() {
             type="button"
             className="dice"
             title="Roll an example name"
+            aria-label="Roll an example name"
             onClick={rollDice}
             disabled={status === 'loading'}
           >
-            🎲
+            <DiceIcon />
           </button>
           <input
             className="name-input"
@@ -88,15 +89,16 @@ export default function App() {
             }}
           />
         </div>
-        <button
-          type="button"
-          className="check-button"
-          onClick={() => void check()}
-          disabled={status === 'loading' || !firstName.trim() || !surname.trim()}
-        >
-          {status === 'loading' ? 'Consulting the oracles...' : 'Check Name'}
-        </button>
       </section>
+
+      <button
+        type="button"
+        className="check-button"
+        onClick={() => void check()}
+        disabled={status === 'loading' || !firstName.trim() || !surname.trim()}
+      >
+        {status === 'loading' ? 'Consulting the oracles...' : 'Check Name'}
+      </button>
 
       {status === 'error' && <p className="verdict verdict--error">{error}</p>}
       {status === 'done' && result && (
@@ -120,5 +122,26 @@ export default function App() {
         </>
       )}
     </main>
+  )
+}
+
+function DiceIcon() {
+  return (
+    <svg className="dice__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <g stroke="#6b4700" strokeWidth="0.6" strokeLinejoin="round">
+        <path d="M12 2.5 20.5 6.8 12 11.1 3.5 6.8Z" fill="#ffeb7a" />
+        <path d="M3.5 6.8 12 11.1V21.5L3.5 17.2Z" fill="#f4c21c" />
+        <path d="M12 11.1 20.5 6.8V17.2L12 21.5Z" fill="#c99209" />
+      </g>
+      <g fill="#6b4200">
+        <ellipse cx="12" cy="6.8" rx="1.5" ry="0.8" />
+        <ellipse cx="6" cy="10.9" rx="0.9" ry="1.2" />
+        <ellipse cx="9.5" cy="12.7" rx="0.9" ry="1.2" />
+        <ellipse cx="6" cy="15.3" rx="0.9" ry="1.2" />
+        <ellipse cx="9.5" cy="17.1" rx="0.9" ry="1.2" />
+        <ellipse cx="14.6" cy="12.7" rx="0.9" ry="1.2" />
+        <ellipse cx="18" cy="15.3" rx="0.9" ry="1.2" />
+      </g>
+    </svg>
   )
 }
