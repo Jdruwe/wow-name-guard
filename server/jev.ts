@@ -1,11 +1,11 @@
 import type { Category } from '../shared/verdict'
 
-const JEVO_MODEL = 'typesafe/jev-1.13'
+const JEV_MODEL = 'typesafe/jev-1.13'
 const DECISIONS_URL = 'https://openrouter.ai/api/alpha/decisions'
 
 export type JevRequest = {
-  firstName: string
-  surname: string
+  mainName: string
+  secondaryName: string
 }
 
 type DecisionsResponse = {
@@ -29,13 +29,13 @@ const CATEGORIES: Category[] = ['clean', 'sexual', 'racist', 'offensive', 'inaut
 const JUDGING_CONTEXT =
   'The name was entered as two parts; also consider joined_name, which is both parts concatenated into one word, because banned words may only appear when the parts are joined. Judge the whole name, including words hidden by compound names, unusual casing or leetspellings.'
 
-export async function askJev({ firstName, surname }: JevRequest) {
+export async function askJev({ mainName, secondaryName }: JevRequest) {
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) {
     throw new Error('OPENROUTER_API_KEY is not set')
   }
 
-  const joinedName = (firstName + surname)
+  const joinedName = (mainName + secondaryName)
     .toLowerCase()
     .replace(/[^a-z0-9]/g, '')
 
@@ -46,11 +46,14 @@ export async function askJev({ firstName, surname }: JevRequest) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: JEVO_MODEL,
+      model: JEV_MODEL,
+      // Keys stay first_name/surname on purpose, even though the domain calls
+      // them Main Name and Secondary Name: Jev scores measurably better and
+      // more consistently with these keys. See docs/adr/0001-jev-state-keys.md.
       state: {
-        first_name: firstName,
-        surname,
-        full_name: `${firstName} ${surname}`,
+        first_name: mainName,
+        surname: secondaryName,
+        full_name: `${mainName} ${secondaryName}`,
         joined_name: joinedName,
       },
       questions: {

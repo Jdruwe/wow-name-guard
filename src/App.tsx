@@ -20,18 +20,18 @@ const CATEGORY_LABELS = {
 } as const
 
 export default function App() {
-  const [firstName, setFirstName] = useState('')
-  const [surname, setSurname] = useState('')
+  const [mainName, setMainName] = useState('')
+  const [secondaryName, setSecondaryName] = useState('')
   const [status, setStatus] = useState<Status>('idle')
   const [result, setResult] = useState<CheckResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [diceIndex, setDiceIndex] = useState(0)
 
-  async function check(first = firstName, last = surname) {
-    if (!first.trim() || !last.trim()) return
+  async function check(main = mainName, secondary = secondaryName) {
+    if (!main.trim() || !secondary.trim()) return
     setStatus('loading')
     try {
-      const response = await checkName(first.trim(), last.trim())
+      const response = await checkName(main.trim(), secondary.trim())
       if (response.result) {
         setResult(response.result)
         setError(null)
@@ -49,8 +49,8 @@ export default function App() {
   function rollDice() {
     const example = EXAMPLE_NAMES[diceIndex % EXAMPLE_NAMES.length]
     setDiceIndex((diceIndex + 1) % EXAMPLE_NAMES.length)
-    setFirstName(example.firstName)
-    setSurname(example.surname)
+    setMainName(example.mainName)
+    setSecondaryName(example.secondaryName)
   }
 
   return (
@@ -70,20 +70,20 @@ export default function App() {
           </button>
           <input
             className="name-input"
-            value={firstName}
+            value={mainName}
             maxLength={MAX_NAME_LENGTH}
-            placeholder="First Name"
-            onChange={(event) => setFirstName(event.target.value)}
+            placeholder="Main Name"
+            onChange={(event) => setMainName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') void check()
             }}
           />
           <input
             className="name-input"
-            value={surname}
+            value={secondaryName}
             maxLength={MAX_NAME_LENGTH}
-            placeholder="Surname"
-            onChange={(event) => setSurname(event.target.value)}
+            placeholder="Secondary Name"
+            onChange={(event) => setSecondaryName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') void check()
             }}
@@ -95,7 +95,7 @@ export default function App() {
         type="button"
         className="check-button"
         onClick={() => void check()}
-        disabled={status === 'loading' || !firstName.trim() || !surname.trim()}
+        disabled={status === 'loading' || !mainName.trim() || !secondaryName.trim()}
       >
         {status === 'loading' ? 'Consulting the oracles...' : 'Check Name'}
       </button>

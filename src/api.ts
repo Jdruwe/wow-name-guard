@@ -5,11 +5,11 @@ export type CheckResponse = {
   error: string | null
 }
 
-export async function checkName(firstName: string, surname: string): Promise<CheckResponse> {
+export async function checkName(mainName: string, secondaryName: string): Promise<CheckResponse> {
   const response = await fetch('/api/check', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ firstName, surname }),
+    body: JSON.stringify({ mainName, secondaryName }),
   })
   if (!response.ok && response.status !== 400) {
     throw new Error('The Name Guard could not be reached.')

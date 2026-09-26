@@ -5,21 +5,22 @@ A proof-of-concept that mimics World of Warcraft's character name picker and che
 ## Language
 
 **Name**:
-The full character name a player picks, consisting of a First Name and a Surname. The UI mirrors WoW's "Full Name" picker (two fields, one dice button).
+The full character name a player picks, consisting of a Main Name and a Secondary Name, as introduced by World of Warcraft: Forever. The UI mirrors WoW's "Full Name" picker (two fields, one dice button).
 _Avoid_: character name, username
 
-**First Name**:
-The left name field. Max length matches the Surname.
-_Avoid_: given name
+**Main Name**:
+The left name field. Max length matches the Secondary Name.
+_Avoid_: first name, given name
 
-**Surname**:
-The right name field. Max length matches the First Name.
+**Secondary Name**:
+The right name field. Max length matches the Main Name.
+_Avoid_: surname, last name
 
 **Full Name**:
-The First Name and Surname joined together (e.g. "Pe Nis"). This is what the Name Guard judges — never the parts in isolation, because banned content can span both parts.
+The Main Name and Secondary Name joined with a space (e.g. "Pe Nis"). This is what the Name Guard judges — never the parts in isolation, because banned content can span both parts.
 
 **Joined Name**:
-The First Name and Surname concatenated into a single lowercase word with separators removed (e.g. "penis"). Because banned words often only surface when the parts are joined, the Name Guard judges the Full Name *and* the Joined Name together.
+The Main Name and Secondary Name concatenated into a single lowercase word with separators removed (e.g. "penis"). Because banned words often only surface when the parts are joined, the Name Guard judges the Full Name *and* the Joined Name together.
 
 **Name Guard**:
 The content check itself. It judges *content only* (sexual, racist, other offensive material) of the Full Name — it deliberately does NOT enforce WoW's formatting rules (capitalization, allowed characters, min length). Only a shared max length applies. One guard covers the whole name; its Verdict applies to both fields.

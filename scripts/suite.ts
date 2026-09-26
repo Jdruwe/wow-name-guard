@@ -18,23 +18,23 @@ const latencies: number[] = []
 const costs: number[] = []
 
 for (const example of EXAMPLE_NAMES) {
-  process.stdout.write(`Checking ${example.firstName} ${example.surname}... `)
+  process.stdout.write(`Checking ${example.mainName} ${example.secondaryName}... `)
   const start = performance.now()
   try {
-    const answers = await askJev({ firstName: example.firstName, surname: example.surname })
+    const answers = await askJev({ mainName: example.mainName, secondaryName: example.secondaryName })
     const ms = performance.now() - start
     latencies.push(ms)
     costs.push(answers.usage.cost)
     const result = decide(answers)
     rows.push(
-      `| ${example.firstName} ${example.surname} | ${example.label} | ${result.verdict} | ${result.category} | ${result.noul.toFixed(2)} | ${result.severity.toFixed(2)} | ${example.expected} | ${formatMs(ms)} | ${formatUsd(answers.usage.cost)} |`,
+      `| ${example.mainName} ${example.secondaryName} | ${example.label} | ${result.verdict} | ${result.category} | ${result.noul.toFixed(2)} | ${result.severity.toFixed(2)} | ${example.expected} | ${formatMs(ms)} | ${formatUsd(answers.usage.cost)} |`,
     )
     console.log(`${result.verdict} (${formatMs(ms)}, ${formatUsd(answers.usage.cost)})`)
   } catch (err) {
     const ms = performance.now() - start
     console.log(`failed (${formatMs(ms)})`)
     rows.push(
-      `| ${example.firstName} ${example.surname} | ${example.label} | ERROR | | | | ${example.expected} | ${formatMs(ms)} | |`,
+      `| ${example.mainName} ${example.secondaryName} | ${example.label} | ERROR | | | | ${example.expected} | ${formatMs(ms)} | |`,
     )
     console.error(`  ${(err as Error).message}`)
   }

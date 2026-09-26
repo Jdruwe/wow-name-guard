@@ -12,18 +12,18 @@ const app = new Hono()
 app.use('/api/*', cors({ origin: 'http://localhost:5173' }))
 
 app.post('/api/check', async (c) => {
-  const body = await c.req.json<{ firstName?: string; surname?: string }>()
-  const firstName = (body.firstName ?? '').trim()
-  const surname = (body.surname ?? '').trim()
+  const body = await c.req.json<{ mainName?: string; secondaryName?: string }>()
+  const mainName = (body.mainName ?? '').trim()
+  const secondaryName = (body.secondaryName ?? '').trim()
 
-  if (!firstName || !surname) {
-    return c.json({ error: 'Both a first name and a surname are required.' }, 400)
+  if (!mainName || !secondaryName) {
+    return c.json({ error: 'Both a main name and a secondary name are required.' }, 400)
   }
-  if (firstName.length > MAX_NAME_LENGTH || surname.length > MAX_NAME_LENGTH) {
+  if (mainName.length > MAX_NAME_LENGTH || secondaryName.length > MAX_NAME_LENGTH) {
     return c.json({ error: `Each name part can be at most ${MAX_NAME_LENGTH} characters.` }, 400)
   }
 
-  const answers = await askJev({ firstName, surname })
+  const answers = await askJev({ mainName, secondaryName })
   return c.json({ result: decide(answers), error: null })
 })
 
